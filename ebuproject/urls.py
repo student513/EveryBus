@@ -21,7 +21,9 @@ from ebuapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.home, name = "home"),
+    #path('search/<str:BusNm>/', views.search, name='search'),
     path('search/', views.search, name='search'),
     path('detail/', views.detail, name='detail'),
     path('bookmark/', views.bookmark, name='bookmark'),
+    path('list/', views.show_list, name='list'),
 ]

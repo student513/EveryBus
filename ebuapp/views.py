@@ -7,11 +7,13 @@ import sys
 import datetime
 import time
 import json
-from config import *
 import math
-
+import xmltodict
+import requests
 def get_request_url(url):
+    
     req = urllib.request.Request(url)
+    
     try: 
         response = urllib.request.urlopen(req)
         if response.getcode() == 200:
@@ -21,44 +23,100 @@ def get_request_url(url):
         print(e)
         print("[%s] Error for URL : %s" % (datetime.datetime.now(), url))
         return None
+
+def home(request):#버스 번호 입력하여 노선ID 반환
+    end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute"
+    
+    parameters = "?ServiceKey=" + "KfsKvr7vCiATWu1bthGHoUmNu0mCeCHwk75nar9Aoti0j5t9RjlY2Uhhcs6v%2Fb5xTB6pf6xLmvVa7QIz5SkTBA%3D%3D"
+    parameters += "&busRouteId=" + "100100112"
+    url = end_point + parameters
+    
+    retData = get_request_url(url)
+    
+    asd = xmltodict.parse(retData)
+    json_type = json.dumps(asd)
+    data = json.loads(json_type)
+
+    return render(request, 'ebuapp/home.html', {'ID_list': data})
+
 ###########################################################
 # 버스 번호로 검색하기
+def saveDict(dictData, num):
+    if(num==0):
+        save = dictData
+    elif(num==1):
+        return save
+
 def getBusRouteId(strSrch):#버스 번호 입력하여 노선ID 반환
     
     end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getBusRouteList"
-    
-    parameters = "?_type=json&serviceKey=" + "KfsKvr7vCiATWu1bthGHoUmNu0mCeCHwk75nar9Aoti0j5t9RjlY2Uhhcs6v%2Fb5xTB6pf6xLmvVa7QIz5SkTBA%3D%3D"
+    parameters = "?ServiceKey=" + "KfsKvr7vCiATWu1bthGHoUmNu0mCeCHwk75nar9Aoti0j5t9RjlY2Uhhcs6v%2Fb5xTB6pf6xLmvVa7QIz5SkTBA%3D%3D"
     parameters += "&strSrch=" + strSrch
-
     url = end_point + parameters
     
     retData = get_request_url(url)
-    
-    if (retData == None):
+
+    asd = xmltodict.parse(retData)
+    json_type = json.dumps(asd)
+    data = json.loads(json_type)
+
+    if (data == None):
         return None
     else:
-        return request.get(retData).json()
+        return data
 
-def parse_RouteId():#노선ID get / 수정사항 : 버스번호로 검색하면 그 번호를 포함한 모든 버스목록 표시, 그중 하나 누르면 그 버스의 노선ID반환
-    jsonData = getBusRouteId(strSrch)
-    ###
-    ###
-    return getStation_Nm_No(str(jsonData['ServiceResult']['msgBody']['busRouteId']))
+def show_list(request):#검색어와 관련된 버스노선 목록을 출력
+    #strSrch = request.GET.get() 검색어는 어떻게 받아올까?
+    Nm_list=[]
+    dictData_1 = getBusRouteId("110")# dictData_1 : 검색어를 포함하는 버스노선 정보 getBusRouteList
+    for i in range(len(dictData_1['ServiceResult']['msgBody']['itemList'])):
+        Nm_list.append(dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteNm'])
 
-def getStation_Nm_No(busRouteId):#parse_RouteId를 이용해 얻은 노선 ID로 정류소 고유번호, 이름 반환
+    return render(request, 'ebuapp/list.html', {'Nm_list': Nm_list})
+
+def getStation_Nm_No(busRouteId):#노선 ID로 정류소 고유번호, 이름을 포함한 dict반환
     end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute"
     
-    parameters = "?_type=json&serviceKey=" + "KfsKvr7vCiATWu1bthGHoUmNu0mCeCHwk75nar9Aoti0j5t9RjlY2Uhhcs6v%2Fb5xTB6pf6xLmvVa7QIz5SkTBA%3D%3D"
-    parameters += "&busRouteId" + busRouteId
-
+    parameters = "?ServiceKey=" + "KfsKvr7vCiATWu1bthGHoUmNu0mCeCHwk75nar9Aoti0j5t9RjlY2Uhhcs6v%2Fb5xTB6pf6xLmvVa7QIz5SkTBA%3D%3D"
+    parameters += "&busRouteId=" + busRouteId
     url = end_point + parameters
     
     retData = get_request_url(url)
     
-    if (retData == None):
+    asd = xmltodict.parse(retData)
+    json_type = json.dumps(asd)
+    data = json.loads(json_type)
+    
+    if (data == None):
         return None
     else:
-        return request.get(retData).json()
+        return data
+
+def search(request):#, BusNm): #list.html에서 받아온 정확한 버스노선번호로 ID를 도출한다.
+    station_Nm_List=[]
+    station_No_List=[]
+    busId=""
+    ###
+    BusNm="110A고려대"
+    dictData_1 = getBusRouteId("110")
+    ###
+    # dictData_1를 global로 선언하는 방법? : dictData_1반환 함수를 하나 만들자
+    for i in range(len(dictData_1['ServiceResult']['msgBody']['itemList'])):
+        if str(dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteNm']) == BusNm:
+            busId = str(dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteId'])
+
+    dictData_2 = getStation_Nm_No(busId)# dictData_2 : 노선ID로 정류장이름, 순번을 포함한 dict. getStaionsByRouteList 
+    #정류소 이름을 리스트에 저장
+    for i in range(len(dictData_2['ServiceResult']['msgBody']['itemList'])):
+        station_Nm_List.append(dictData_2['ServiceResult']['msgBody']['itemList'][i]['stationNm'])
+    #정류소 순번을 리스트에 저장
+    for i in range(len(dictData_2['ServiceResult']['msgBody']['itemList'])):
+        station_No_List.append(dictData_2['ServiceResult']['msgBody']['itemList'][i]['stationNo'])
+    #return render(request, 'ebuapp/search.html',{'station_Nm_List':dictData_2})
+    return render(request, 'ebuapp/search.html',{'station_Nm_List':station_Nm_List, 'busId':busId})
+
+#dictData를 어떻게 global하게 할까? https://korbillgates.tistory.com/98
+
 
 def parse_station_Nm_No():#정류소 고유번호, 이름 파싱하고 순번 구하는 함수에 넘겨줌/ 수정사항:정류소 이름목록을 검색결과창에 띄워야함
     jsonData = getStation_Nm_No(busRouteId)
@@ -112,18 +170,6 @@ def parse_tId_stNm():
 
 
 #########################################################
-def home(request):
-    return render(request, 'ebuapp/home.html')
-
-def search(request):
-    return render(request, 'ebuapp/search.html')
-
-def detail(request):
-    render(request, 'ebuapp/detail.html')
-
-def bookmark(request):
-    render(request, 'ebuapp/bookmark.html')
-
 def post_list(request):#검색알고리즘 https://wayhome25.github.io/django/2017/05/04/django-queryset-search/
     qs = Post.objects.all()
 
@@ -135,3 +181,10 @@ def post_list(request):#검색알고리즘 https://wayhome25.github.io/django/20
         'post_list' : qs,
         'q' : q,
     })
+
+
+def detail(request):
+    render(request, 'ebuapp/detail.html')
+
+def bookmark(request):
+    render(request, 'ebuapp/bookmark.html')
