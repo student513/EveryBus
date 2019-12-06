@@ -22,8 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.home, name = "home"),
     #path('search/<str:BusNm>/', views.search, name='search'),
-    path('search/', views.search, name='search'),
+    path('bus/', views.bus, name='bus'),
     path('detail/', views.detail, name='detail'),
     path('bookmark/', views.bookmark, name='bookmark'),
-    path('list/', views.show_list, name='list'),
+    path('bus_search/', views.bus_search, name='bus_search'),
+    path('stop/', views.stop, name='stop')
 ]
