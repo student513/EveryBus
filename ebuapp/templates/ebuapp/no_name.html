@@ -1,0 +1,14 @@
+<h3>해당 이름의 정류소가 존재하지 않습니다. </h3>
+<br>
+<h3>다시검색</h3>
+<br>
+<form method = "GET" action = "{% url 'stop_search' %}">
+        <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
+        <button type="submit">정류소검색</button>
+    </form>
+    
+    <br><br><br>
+<form method = "GET" action = "{% url 'bus_search' %}">
+        <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
+        <button type="submit">버스번호검색</button>
+</form>

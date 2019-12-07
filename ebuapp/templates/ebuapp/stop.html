@@ -1,4 +1,13 @@
-정류장 정보
-<!-- {{arrive_time_list}} ///// -->
-
-{{arrmsg_busId}}
+{% for i in busset %}
+    {% for j in i %}
+        {% if forloop.counter == 1 %} 버스 ID : {{j}}<br>
+        {% endif %}
+        {% if forloop.counter == 2 %} 버스명 : {{j}}<br>
+        {% endif %}
+        {% if forloop.counter == 3 %} 첫번째버스 : {{j}}<br>
+        {% endif %}
+        {% if forloop.counter == 4 %} 두번째버스 : {{j}}<br>
+        {% endif %}
+    {% endfor %}
+<br>
+{% endfor %} 

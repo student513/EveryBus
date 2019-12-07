@@ -1,0 +1,5 @@
+{% for key, value in stationpair.items %}
+   
+    <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
+    <br>
+{% endfor %}

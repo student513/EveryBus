@@ -1,8 +1,12 @@
-홈
-<!-- <form action="" method="get">
-    <input type="text" name="q" value="{{ q }}">
-    <input type="submit" value="검색">
-  </form> -->
-  
-{{ID_list}}
-{{dicdat}}
+<h4> 검색 유형</h4> 
+
+<form method = "GET" action = "{% url 'stop_search' %}">
+    <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
+    <button type="submit">정류소검색</button>
+</form>
+
+<br><br><br>
+<form method = "GET" action = "{% url 'bus_search' %}">
+    <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
+    <button type="submit">버스번호검색</button>
+</form>

@@ -1,1 +1,5 @@
-{{Nm_list}}
+{% for key, value in buspair.items %}
+   
+    <a class="btn-link" href= "{% url 'bus' value %}">{{key}} </a>     
+    <br>
+{% endfor %}
