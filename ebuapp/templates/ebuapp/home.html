@@ -10,3 +10,6 @@
     <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
     <button type="submit">버스번호검색</button>
 </form>
+<a href = "{% url 'login' %}">로그인</a>
+<a href = "{% url 'signup' %}">회원가입</a>
+<a href = "{% url 'logout' %}">로그아웃</a>
