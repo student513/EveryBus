@@ -5,6 +5,7 @@
 <form method="POST">
     {% csrf_token %}
     {{ signup_form }}
+    {{profile_form}}
     <input type="submit" name="Submit"/>
 </form>
 
