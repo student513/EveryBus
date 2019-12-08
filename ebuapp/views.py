@@ -17,7 +17,6 @@ from urllib.parse import urlencode, quote_plus
 from django.db.models import Q
 from django.shortcuts import render
 
-
 def home(request):
     return render(request, 'ebuapp/home.html')
 
@@ -94,6 +93,8 @@ buspair = {}
 
 def bus_search(request):#검색어와 관련된 버스노선 목록을 출력
     #strSrch = request.GET.get() 검색어는 어떻게 받아올까?
+    buspair.clear()
+
     Nm_list=[]
     word = request.GET.get('q') #입력받은 단어 word 변수에 저장
     print(word)
@@ -101,11 +102,18 @@ def bus_search(request):#검색어와 관련된 버스노선 목록을 출력
     print(c_word)
     to_use_get_id = c_word
     dictData_1= getBusRouteId(c_word) # dictData_1 : 검색어를 포함하는 버스노선 정보 getBusRouteList
-    
-    for i in range(len(dictData_1['ServiceResult']['msgBody']['itemList'])):
-        Nm_list.append(dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteNm'])
-        buspair[dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteNm']] = dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteId']
-    return render(request, 'ebuapp/bus_search.html', {'Nm_list': Nm_list, 'dictData_1':dictData_1, 'buspair' : buspair})
+
+    # if len(dictData_1['ServiceResult']['msgBody']['itemList']) == 1 :
+    #     buspair[dictData_1['ServiceResult']['msgBody']['itemList']['busRouteNm']] = dictData_1['ServiceResult']['msgBody']['itemList']['busRouteId']
+
+    try:
+        for i in range(len(dictData_1['ServiceResult']['msgBody']['itemList'])):
+            buspair[dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteNm']] = dictData_1['ServiceResult']['msgBody']['itemList'][i]['busRouteId']
+    except KeyError :
+        buspair[dictData_1['ServiceResult']['msgBody']['itemList']['busRouteNm']] = dictData_1['ServiceResult']['msgBody']['itemList']['busRouteId']
+    except TypeError :
+        return render(request, 'ebuapp/no_name.html')
+    return render(request, 'ebuapp/bus_search.html', {'buspair' : buspair})#'Nm_list': Nm_list, 'dictData_1':dictData_1, 
 
 def getStation_Nm_No(busRouteId):#노선 ID로 정류소ID, 이름을 포함한 dict반환
     end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute"
