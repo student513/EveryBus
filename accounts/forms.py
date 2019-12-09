@@ -6,7 +6,7 @@ from .models import Profile
 #from phonenumber_field.formfields import PhoneNumberField
 class SignUpForm(UserCreationForm):
     username = forms.CharField(max_length=20, label="아이디")
-    email = forms.EmailField(max_length=64, label="이메일")
+    #email = forms.EmailField(max_length=64, label="이메일")
 
 
     password1 = forms.CharField(
@@ -23,7 +23,9 @@ class SignUpForm(UserCreationForm):
     )
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['username', 'email', 'password1','password2',]
+        fields = ['username',  'password1','password2',
+        #'email',
+        ]
 
 class ProfileRegsiterForm(forms.ModelForm):
     class Meta:

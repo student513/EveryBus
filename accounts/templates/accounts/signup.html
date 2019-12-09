@@ -1,12 +1,85 @@
-{% block container %}
+{% load static %}
 
-<h1>회원 가입</h1>
+<!doctype html>
+<html lang="kor">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Local CSS -->
+    <link rel = "stylesheet" type="text/css" href="{% static 'accounts/css/a_style.css' %}" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Ebu, 모두를 위한 버스</title>
+  </head>
+
+  <body class="signup_bg">
+    
+    <form class="form-signup fset" method="POST" action="{% url 'login' %}">
+      <br>
+      <img class="mb-4" src="#" alt="" width="72" height="72">
+      <h1 class="megatitle_fset h3 mb-3 font-weight-normal text-center">Ebu 회원가입</h1>
+      {% csrf_token %}
+      
+      <p>
+          <div class="form-group">
+              <label for="username" >아이디: <span class="required">*</span></label> 
+              <input type="text" name="username" class="form-control username" id="username" aria-describedby="emailHelp" placeholder="likelion123" required>
+          </div>
+      </p>
+
+      <p>
+          <div class="form-group">
+              <label for="password1">비밀번호: <span class="required">*</span></label>
+              <input type="password" class="form-control" id="passsword1" name = "password1" placeholder="비밀번호 입력" required>
+          </div>
+      </p>        
+      <p>
+          <div class="form-group">
+              <label for="password2">비밀번호 확인: <span class="required">*</span></label>
+              <input type="password" class="form-control" id="passsword2" name = "password2" placeholder="비밀번호 입력" required>
+              <small id="passwordHelp" class="sub_fset form-text text-muted helptext">&nbsp비밀번호를 다시 한 번 입력하세요. </small>
+          </div>
+      </p>       
+      <p>
+          <div class="form-group">
+              <label for="realname">사용자 이름: <span class="required">*</span></label> 
+              <input type="text" class="form-control" id="realname" aria-describedby="emailHelp" placeholder="홍길동"
+              maxlength = "150" name="realname" required>
+              <small id="nameHelp" class="sub_fset form-text text-muted helptext">&nbsp정확한 이름을 입력하세요.</small>
+          </div>
+      </p>   
+
+      <p>
+          <div class="form-group">
+              <label for="phone">핸드폰 번호: <span class="required">*</span></label> 
+              <input type="text" class="form-control username" id="phone" aria-describedby="emailHelp" placeholder="01012345678"
+              maxlength = "150" name = "phone" required>
+              <small id="nameHelp" class="sub_fset form-text text-muted helptext">&nbsp대쉬(-) 없이 숫자만 입력하세요.</small>
+          </div>
+      </p>
+      <br>
+      <button class="title_fset btn btn-lg btn-indigo btn-block" type="submit">제출하기</button>
+    </form>
+  
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+<!-- <h1>회원 가입</h1>
 
 <form method="POST">
     {% csrf_token %}
     {{ signup_form }}
     {{profile_form}}
     <input type="submit" name="Submit"/>
-</form>
-
-{% endblock %}
+</form> -->

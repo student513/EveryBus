@@ -1,13 +1,51 @@
-{% for i in busset %}
-    {% for j in i %}
-        {% if forloop.counter == 1 %} 버스 ID : {{j}}<br>
-        {% endif %}
-        {% if forloop.counter == 2 %} 버스명 : {{j}}<br>
-        {% endif %}
-        {% if forloop.counter == 3 %} 첫번째버스 : {{j}}<br>
-        {% endif %}
-        {% if forloop.counter == 4 %} 두번째버스 : {{j}}<br>
-        {% endif %}
-    {% endfor %}
-<br>
-{% endfor %} 
+{% extends 'ebuapp/navbar.html' %}
+
+{% block content %}
+    {% load static %}
+    <body class="stopbg">
+        <div class="container py-4">
+            <div class="row text-center text-white mb-3">
+            <div class="col-lg-7 mx-auto">
+                <p class="megatitle_fset">정류장이름</p>
+                <!-- <i class="fa fa-star-o text-gray"></i> -->
+            </div>
+            </div>
+            <!-- End -->
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- List group-->
+                    <ul class="list-group shadow">
+                    <!-- list group item-->
+                    {% for i in busset %}  
+                        <li class="list-group-item">
+                            <div class ="stop_result">
+                                {% for j in i %}      
+                                    <div class="bookmark">
+                                        <i class="fa fa-star-o"></i>
+                                        <!-- <i onclick="myFunction(this)" class="fa fa-star-o"></i> -->
+                                    </div>
+                                    <div class="bus_name">
+                                        {% if forloop.counter == 2 %} <a class ="btn-link" href="{% url 'bus' buspair|get_value:j %}">{{j}}</a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="first_bus">
+                                        {% if forloop.counter == 3 %} &nbsp&nbsp{{j}}
+                                        {% endif %}
+                                    </div>
+                                    <div class="second_bus">
+                                        {% if forloop.counter == 4 %} &nbsp&nbsp{{j}}
+                                        {% endif %}
+                                    </div>
+                                    <div class="reserve"></div>
+                                {% endfor %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>  
+        
+{% endblock %}

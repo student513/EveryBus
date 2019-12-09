@@ -1,8 +1,16 @@
-검색결과
-{{No_Nm_list}}
+<!-- 검색결과
+{{No_Nm_list}} -->
 
 <!-- {% for key, value in stationpair.items %}
    
     <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
     <br>
 {% endfor %} -->
+검색결과
+<br><br>
+
+{% for key, value in No_Nm_list.items %}
+   
+    <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
+    <br>
+{% endfor %} 

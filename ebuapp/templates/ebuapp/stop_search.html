@@ -1,5 +1,24 @@
-{% for key, value in stationpair.items %}
-   
-    <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
-    <br>
-{% endfor %}
+{% extends 'ebuapp/navbar.html' %}
+{% block content %}
+    {% load static %}
+    <body class="stopbg">
+        <div class="container py-4"> 
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- List group-->
+                    <ul class="list-group shadow">
+                        {% for key, value in stationpair.items %}
+                            <li class="list-group-item">
+                                <div class="media align-items-lg-center flex-column flex-lg-row p-0">
+                                    <div class="media-body order-2 order-lg-1">
+                                        <a class="mt-0 mb-2 fset" href= "{% url 'stop' key %}">{{value}} </a>
+                                    </div>
+                                </div>
+                            </li>    
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>   
+        </div>            
+    </body>
+{% endblock %}

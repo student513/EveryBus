@@ -13,7 +13,7 @@ from urllib.parse import urlencode, quote_plus
 
 from django.db.models import Q
 from django.shortcuts import render
-
+from django.template.defaulttags import register
 def home(request):
     return render(request, 'ebuapp/home.html')
 
@@ -47,6 +47,26 @@ def stop_search(request):
         return render(request, 'ebuapp/no_name.html')
     return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
 
+# def stop(request, stationid): #정류소에 접근하는 저상버스 목록
+#     if request.method == 'GET':
+#         url = 'http://ws.bus.go.kr/api/rest/arrive/getLowArrInfoByStId?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&stId='
+#         url = url + str(stationid)
+#         retData = get_request_url(url)
+#         todict = xmltodict.parse(retData)
+#         json_type = json.dumps(todict)
+#         data = json.loads(json_type)
+#         #버스 ID - busrouteID
+#         #버스 번호 - rtNm
+#         #첫번째 도착 예정 버스 메시지 - 'arrmsg1'
+#         #두번째 도착 예정 버스 메시지 - 'arrmsg2'
+#         busset = [[0]*4 for i in range(len(data['ServiceResult']['msgBody']['itemList']))] 
+#         for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
+#             busset[i][0] = data['ServiceResult']['msgBody']['itemList'][i]['busRouteId']
+#             busset[i][1] = data['ServiceResult']['msgBody']['itemList'][i]['rtNm']
+#             busset[i][2] = data['ServiceResult']['msgBody']['itemList'][i]['arrmsg1']
+#             busset[i][3] = data['ServiceResult']['msgBody']['itemList'][i]['arrmsg2']
+#     return render(request, 'ebuapp/stop.html', {'busset' : busset})
+
 def stop(request, stationid): #정류소에 접근하는 저상버스 목록
     if request.method == 'GET':
         url = 'http://ws.bus.go.kr/api/rest/arrive/getLowArrInfoByStId?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&stId='
@@ -59,15 +79,16 @@ def stop(request, stationid): #정류소에 접근하는 저상버스 목록
         #버스 번호 - rtNm
         #첫번째 도착 예정 버스 메시지 - 'arrmsg1'
         #두번째 도착 예정 버스 메시지 - 'arrmsg2'
+        buspair = {}
         busset = [[0]*4 for i in range(len(data['ServiceResult']['msgBody']['itemList']))] 
         for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
             busset[i][0] = data['ServiceResult']['msgBody']['itemList'][i]['busRouteId']
             busset[i][1] = data['ServiceResult']['msgBody']['itemList'][i]['rtNm']
             busset[i][2] = data['ServiceResult']['msgBody']['itemList'][i]['arrmsg1']
             busset[i][3] = data['ServiceResult']['msgBody']['itemList'][i]['arrmsg2']
-    return render(request, 'ebuapp/stop.html', {'busset' : busset})
 
-
+            buspair[data['ServiceResult']['msgBody']['itemList'][i]['rtNm']] = data['ServiceResult']['msgBody']['itemList'][i]['busRouteId']
+    return render(request, 'ebuapp/stop.html', {'busset' : busset, 'buspair':buspair})
 def getBusRouteId(strSrch):#버스 번호 입력하여 노선ID 반환
     
     end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getBusRouteList"
@@ -162,3 +183,6 @@ def bus(request, busid):#, BusNm): #bus_search.html에서 받아온 정확한 �
     return render(request, 'ebuapp/bus.html',{'No_Nm_list':No_Nm_list})
 
 
+@register.filter
+def get_value(dictionary, key):
+    return dictionary.get(key)
