@@ -15,5 +15,8 @@ urlpatterns = [
 
     path('signup/',accounts.views.signup, name='signup'),
     path('login/', accounts.views.login, name='login'),  
-    path('logout/', accounts.views.logout, name='logout')
+    path('logout/', accounts.views.logout, name='logout'),
+    path('stop/<int:stationid>/<int:busid>/<busname>/book_bus/', ebuapp.views.book_bus, name='book_bus'),
+    path('bus/<int:busid>/<int:stationid>/<stationname>/book_stop/', ebuapp.views.book_stop, name='book_stop'),
+    path('bookmark/', ebuapp.views.bookmark, name='bookmark'),
 ]

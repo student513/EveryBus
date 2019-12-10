@@ -1,1 +1,13 @@
 즐겨찾기 목록
+<br>
+버스명 즐겨찾기
+<br>
+{% for key, value in bookmark_bus.items %}
+    <a class ="btn-link" href="{% url 'bus' key %}">{{value}}</a><br>
+{% endfor %}
+<br><br>
+정류소명 즐겨찾기
+<br>
+{% for key, value in bookmark_stop.items %}
+    <a class ="btn-link" href="{% url 'stop' key %}">{{value}}</a><br>
+{% endfor %}

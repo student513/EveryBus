@@ -4,14 +4,14 @@ from django.contrib.auth import login as auth_login, authenticate as auth_authen
 
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from .forms import SignUpForm,CustomUserChangeForm,ProfileRegsiterForm,LoginForm
+from .forms import SignUpForm,CustomUserChangeForm,ProfileRegisterForm,LoginForm
 from django.http import HttpResponse
 
 def signup(request):
     if request.method == 'POST':
         #signup_form = UserCreationForm(request.POST)
         signup_form = SignUpForm(request.POST)
-        profile_form = ProfileRegsiterForm(request.POST)
+        profile_form = ProfileRegisterForm(request.POST)
         if signup_form.is_valid() and profile_form.is_valid():
             user = signup_form.save(commit=False)
             user.save()
@@ -22,7 +22,7 @@ def signup(request):
     else:
         #signup_form = UserCreationForm()
         signup_form = SignUpForm()
-        profile_form = ProfileRegsiterForm()
+        profile_form = ProfileRegisterForm()
     return render(request, 'accounts/signup.html', {'signup_form':signup_form,'profile_form':profile_form})
 
 # def login(request):

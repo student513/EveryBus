@@ -6,7 +6,7 @@
         <div class="container py-4">
             <div class="row text-center text-white mb-3">
             <div class="col-lg-7 mx-auto">
-                <p class="megatitle_fset">정류장이름</p>
+                <p class="megatitle_fset">{{staname}}</p>
                 <!-- <i class="fa fa-star-o text-gray"></i> -->
             </div>
             </div>
@@ -22,22 +22,30 @@
                             <div class ="stop_result">
                                 {% for j in i %}      
                                     <div class="bookmark">
-                                        <i class="fa fa-star-o"></i>
+                                        {% if forloop.counter == 1 %} 
+                                                {% if j in bookmark %}<a href="{% url 'book_bus' staid j buspair2|get_value:j %}"><i class="fa fa-star"></i></a>
+                                                {% else %} <a href="{% url 'book_bus' staid j buspair2|get_value:j %}"><i class="fa fa-star-o"></i></a>
+                                                {% endif %}
                                         <!-- <i onclick="myFunction(this)" class="fa fa-star-o"></i> -->
+                                        {% endif %}
                                     </div>
                                     <div class="bus_name">
                                         {% if forloop.counter == 2 %} <a class ="btn-link" href="{% url 'bus' buspair|get_value:j %}">{{j}}</a>
                                         {% endif %}
                                     </div>
                                     <div class="first_bus">
-                                        {% if forloop.counter == 3 %} &nbsp&nbsp{{j}}
+                                        {% if forloop.counter == 3 %} {{j}}
                                         {% endif %}
                                     </div>
                                     <div class="second_bus">
-                                        {% if forloop.counter == 4 %} &nbsp&nbsp{{j}}
+                                        {% if forloop.counter == 4 %} {{j}}
                                         {% endif %}
                                     </div>
-                                    <div class="reserve"></div>
+                                    <div class="reserve">
+                                        {% if forloop.counter == 1 %} 
+                                            &nbsp&nbsp<img src="{% static 'ebuapp/images/calendar.png' %}" height ="20em">
+                                        {% endif %}
+                                    </div>
                                 {% endfor %}
                             </div>
                         </li>

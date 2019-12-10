@@ -27,17 +27,35 @@ class SignUpForm(UserCreationForm):
         #'email',
         ]
 
-class ProfileRegsiterForm(forms.ModelForm):
+class ProfileRegisterForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone']
+        fields = ['phone',]
         widgets ={
             'phone': forms.TextInput(attrs={'class':'form-control', 'placeholder':'숫자만 입력해주세요'})
         }
         labels ={
             'phone': '연락처',
         }
+    bookmark={}
+    bookkey=[]
 
+    def push(self, key, value):
+        self.bookmark[key] = value
+        self.bookkey.append(key)
+    def pop(self, key):
+        del self.bookmark[key]
+        self.bookkey.remove(key)
+    
+    stopbookmark={}
+    stopbookkey=[]
+
+    def stoppush(self, key, value):
+        self.stopbookmark[key] = value
+        self.stopbookkey.append(key)
+    def stoppop(self,key):
+        del self.stopbookmark[key]
+        self.stopbookkey.remove(key)
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User

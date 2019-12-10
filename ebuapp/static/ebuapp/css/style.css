@@ -66,13 +66,13 @@
 .first_bus { 
     grid-area: first_bus;
     font-family: 'Eoe_Zno_L';
-    font-size : 13px;
+    font-size : 12px;
 }
   
 .second_bus { 
     grid-area: second_bus;
     font-family: 'Eoe_Zno_L';
-    font-size : 13px;
+    font-size : 12px;
  }
   
 .reserve { grid-area: reserve; }
