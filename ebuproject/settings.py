@@ -25,7 +25,7 @@ SECRET_KEY = 'd_p0qi&82*uu&d-tf0s$sz=&dqx%u_1y(ga-hhe9!fig0f%=7e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['production-env.rx6mah5wnp.ap-northeast-2.elasticbeanstalk.com']
 
 
 # Application definition
@@ -121,3 +121,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'home'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
