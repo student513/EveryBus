@@ -37,6 +37,10 @@ def get_request_url(url):
 
 
 def stop_search(request):
+
+    if request.user.is_active == False:
+        return render(request, 'ebuapp/stop_search.html')
+        
     stationpair = {}    #초기화
     url = 'http://ws.bus.go.kr/api/rest/stationinfo/getLowStationByName?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&stSrch='
     word = request.GET.get('q') #입력받은 단어 word 변수에 저장
@@ -121,7 +125,9 @@ def getBusRouteId(strSrch):#버스 번호 입력하여 노선ID 반환
 to_use_get_id = ''
 buspair = {}
 def bus_search(request):#검색어와 관련된 버스노선 목록을 출력
-    #strSrch = request.GET.get() 검색어는 어떻게 받아올까?
+    if request.user.is_active == False:
+        return render(request, 'ebuapp/bus_search.html')
+    
     buspair.clear()
 
     Nm_list=[]
@@ -160,6 +166,24 @@ def getStation_Nm_No(busRouteId):#노선 ID로 정류소ID, 이름을 포함한 
     else:
         return data
 
+def get_busRoute_Nm(busRouteId):
+    end_point = "http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo"
+    
+    parameters = "?ServiceKey=" + "O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D"
+    parameters += "&busRouteId=" + str(busRouteId)
+    url = end_point + parameters
+    
+    retData = get_request_url(url)
+    
+    asd = xmltodict.parse(retData)
+    json_type = json.dumps(asd)
+    data = json.loads(json_type)
+    
+    if (data == None):
+        return None
+    else:
+        return data
+
 def bus(request, busid):#, BusNm): #bus_search.html에서 받아온 정확한 버스노선번호로 ID를 도출한다.
     profile =  ProfileRegisterForm(instance = request.user)
     station_Nm_List=[]
@@ -167,12 +191,31 @@ def bus(request, busid):#, BusNm): #bus_search.html에서 받아온 정확한 �
     ### global로 사용할 것들
     station_No_List=[]
     ###
-
+    busNm_dict=get_busRoute_Nm(busid)
+    busNm=busNm_dict['ServiceResult']['msgBody']['itemList']['busRouteNm']
 
     dictData_2 = getStation_Nm_No(busid)# dictData_2 : 노선ID로 정류장이름, 순번을 포함한 dict. getStaionsByRouteList 
 
     No_Nm_list={}
+    now_location = []
 
+    url = 'http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&busRouteId='
+    url = url + str(busid)
+    retData = get_request_url(url)
+    todict = xmltodict.parse(retData)
+    json_type = json.dumps(todict)
+    data = json.loads(json_type)
+
+    for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
+        print(type(data['ServiceResult']['msgBody']['itemList'][i]['busType1']))
+        if data['ServiceResult']['msgBody']['itemList'][i]['busType1'] == '1':
+            print(data['ServiceResult']['msgBody']['itemList'][i]['arrmsg1'])
+            if data['ServiceResult']['msgBody']['itemList'][i]['arrmsg1'] == '곧 도착':
+                now_location.append(data['ServiceResult']['msgBody']['itemList'][i]['stId'])
+            elif '1번째 전' in data['ServiceResult']['msgBody']['itemList'][i]['arrmsg1']:
+                now_location.append(data['ServiceResult']['msgBody']['itemList'][i-1]['stId'])
+
+    print(now_location)
     #정류소 이름을 리스트에 저장
     for i in range(len(dictData_2['ServiceResult']['msgBody']['itemList'])):
         station_Nm_List.append(dictData_2['ServiceResult']['msgBody']['itemList'][i]['stationNm'])
@@ -183,12 +226,11 @@ def bus(request, busid):#, BusNm): #bus_search.html에서 받아온 정확한 �
     
     for i in range(len(dictData_2['ServiceResult']['msgBody']['itemList'])):
         No_Nm_list[station_No_List[i]] = station_Nm_List[i]
-    
 
     stop=[]
     for key , value in profile.stopbookmark.items():
         stop.append(str(key))
-    return render(request, 'ebuapp/bus.html',{'No_Nm_list':No_Nm_list , 'busid':busid, 'stop':stop})
+    return render(request, 'ebuapp/bus.html',{'No_Nm_list':No_Nm_list , 'busid':busid, 'stop':stop, 'now_location':now_location,'busNm':busNm})
 
 
 def book_bus(request, stationid, busid, busname):

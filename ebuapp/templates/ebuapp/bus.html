@@ -1,12 +1,35 @@
-검색결과
-<br><br>
-
-{% for key, value in No_Nm_list.items %}
-    {% if key in stop %}<a href="{% url 'book_stop' busid key value %}"><button class="fa fa-star-half-o">liked!</button></a>
-    {% else %} <a href="{% url 'book_stop' busid key value %}"><button class="fa fa-star-o">like</button></a>
-    {% endif %}
-    <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
-    <br>
-
+{% extends 'ebuapp/navbar.html' %}
+{% block content %}
+    {% load static %}
     
-{% endfor %} 
+    <body class="stopbg">
+        <div class="container py-4"> 
+            <div class="row text-center text-white mb-3">
+                <div class="col-lg-7 mx-auto">
+                        <p class="megatitle_fset">{{busNm}}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <!-- List group-->
+                    <ul class="list-group shadow">
+                    {% for key, value in No_Nm_list.items %}
+                    <li class="list-group-item">
+                            <div class ="bus_result">    
+                            {% if key in stop %}<a href="{% url 'book_stop' busid key value %}">
+                                    <i class="fa fa-star"></i></a>
+                            {% else %} <a href="{% url 'book_stop' busid key value %}">
+                                    <i class="fa fa-star-o"></i></a>
+                            {% endif %}
+                            <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
+                            <br>
+                        
+                            
+                        {% endfor %} 
+                    </ul>
+                
+            </div>   
+        </div>            
+    </body>
+{% endblock %}

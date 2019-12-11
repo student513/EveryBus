@@ -39,8 +39,39 @@
     font-size : 12px;
 }
 
+/* home */
+
+html,
+body{
+  height: 100%;
+}
+
+.bgbg{
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    background: #3f51b5;
+    background: -webkit-linear-gradient(to right, #3f51b5, #3775c5);
+    background: linear-gradient(to right, #3f51b5, #3775c5);
+    min-height: 100vh;
+  }
+
+.search_box{
+  width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+
+}
+
+
+
 /*stop.html*/
-.stopbg {
+.stopbg{
+  
     background: #3f51b5;
     background: -webkit-linear-gradient(to right, #3f51b5, #3775c5);
     background: linear-gradient(to right, #3f51b5, #3775c5);
@@ -64,15 +95,24 @@
 }
   
 .first_bus { 
-    grid-area: first_bus;
-    font-family: 'Eoe_Zno_L';
-    font-size : 12px;
+  grid-area: first_bus;
+  font-family: 'Eoe_Zno_L';
+  font-size : 12px;
 }
-  
+
 .second_bus { 
-    grid-area: second_bus;
-    font-family: 'Eoe_Zno_L';
-    font-size : 12px;
- }
-  
+  grid-area: second_bus;
+  font-family: 'Eoe_Zno_L';
+  font-size : 12px;
+}
 .reserve { grid-area: reserve; }
+
+/* bus.html */
+.bus_result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "bookmark staname";
+}
+
+
+

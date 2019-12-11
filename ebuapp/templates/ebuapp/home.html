@@ -1,4 +1,4 @@
-<h4> 검색 유형</h4> 
+<!-- <h4> 검색 유형</h4> 
 
 <form method = "GET" action = "{% url 'stop_search' %}">
     <input type = "search" name = "q" value="{{request.GET.q}}" id='search-text'>
@@ -12,4 +12,60 @@
 </form>
 <a href = "{% url 'login' %}">로그인</a>
 <a href = "{% url 'signup' %}">회원가입</a>
-<a href = "{% url 'logout' %}">로그아웃</a>
+<a href = "{% url 'logout' %}">로그아웃</a> -->
+
+{% load static %}
+
+<!doctype html>
+<html lang="kor">
+        <head>
+                <!-- Required meta tags -->
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            
+                <!-- Local CSS -->
+                <link rel = "stylesheet" type="text/css" href="{% static 'ebuapp/css/style.css' %}" />
+            
+                <!-- Bootstrap CSS -->
+                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+            
+                <!-- Icon -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            
+                <title>Ebu, 모두를 위한 버스</title>
+              </head>
+
+  <body class="stopbg text-center"> 
+      <div class="search_box">
+
+        <form method = "GET" action = "{% url 'stop_search' %}">
+                        <img class="mb-4" src="#" alt="" width="72" height="72">
+                        <h1 class="megatitle_fset h3 mb-3 font-weight-normal">Ebu</h1>  
+                        <input type = "search" name = "q" placeholder="정류소명으로 검색" value="{{request.GET.q}}" id='search-text'>
+                        <button type="submit">검색</button>
+        </form>
+        <form method = "GET" action = "{% url 'bus_search' %}">
+            <input type = "search" name = "q" placeholder="버스번호로 검색" value="{{request.GET.q}}" id='search-text'>
+            
+            <button type="submit">검색</button>
+        </form>
+                  
+        <br><br><br>
+    
+        <a href = "{% url 'login' %}">로그인</a>
+        <a href = "{% url 'signup' %}">회원가입</a>
+        <a href = "{% url 'logout' %}">로그아웃</a>
+
+
+</div>
+
+
+</body>
+
+
+    
+
+ 
+
+
+</html>
