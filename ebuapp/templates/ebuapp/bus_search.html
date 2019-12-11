@@ -1,36 +1,44 @@
 {% extends 'ebuapp/navbar.html' %}
 {% block content %}
     {% load static %}
-    
-    {% if user.is_authenticated %}
 
     <body class="stopbg">
-        <div class="container py-4"> 
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <!-- List group-->
-                    <ul class="list-group shadow">
-                        {% for key, value in buspair.items %}
-                            <li class="list-group-item">
-                                <div class="media align-items-lg-center flex-column flex-lg-row p-0">
-                                    <div class="media-body order-2 order-lg-1">
-                                        <a class="mt-0 mb-2 fset" href= "{% url 'bus' value %}">{{key}} </a>
+        {% if user.is_authenticated %}
+            <div class="container py-4"> 
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- List group-->
+                        <ul class="list-group shadow">
+                            {% for key, value in buspair.items %}
+                                <li class="list-group-item">
+                                    <div class="media align-items-lg-center flex-column flex-lg-row p-0">
+                                        <div class="media-body order-2 order-lg-1">
+                                            <a class="mt-0 mb-2 fset" href= "{% url 'bus' value %}">{{key}} </a>
+                                        </div>
                                     </div>
-                                </div>
+                                </li>    
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>   
+            </div>
+        {% else %}
+            <div class="container py-4"> 
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <!-- List group-->
+                        <ul class="list-group shadow">
+                            <li class="list-group-item">
+                                <p class="title_fset text-center">로그인이 필요합니다!</p>
+                                <br>
+                                <p class="fset text-center">로그인 혹은 회원가입을 하시려면 </p>
+                                <p class="fset text-center">우측 상단의 버튼을 눌러주세요</p>
                             </li>    
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>   
-        </div>            
+                        </ul>
+                    </div>
+                </div>   
+            </div>
+        {% endif %}          
     </body>
-
-    {% else %}
-    <div class ="text-center">
-        <h2>로그인이 필요합니다!</h2>
-        <h4>로그인 혹은 회원가입을 하시려면 </h4>
-        <h4>좌측 상단의 로그인 버튼을 눌러주세요</h4>
-    </div>
-    {% endif %}
 
 {% endblock %}

@@ -21,8 +21,8 @@
 
   <body class="login_bg text-center">
     <form class="form-signin" method="POST" action="{% url 'login' %}">
-        <img class="mb-4" src="#" alt="" width="72" height="72">
-        <h1 class="megatitle_fset h3 mb-3 font-weight-normal">모두를 위한 버스</h1>
+        <!-- <img class="mb-4" src="#" alt="" width="72" height="72"> -->
+        <a class="megatitle_fset font-weight-normal ft_indigo" href="{% url 'home' %}">Ebu</a>
         {% csrf_token %}
         <label for="inputUsername" class="sr-only">User Name</label>
         <input name = "username" type="username" id="inputUsername" class="fset form-control" placeholder="Username" required="" autofocus="">

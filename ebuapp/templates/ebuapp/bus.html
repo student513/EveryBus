@@ -1,7 +1,6 @@
 {% extends 'ebuapp/navbar.html' %}
 {% block content %}
     {% load static %}
-    
     <body class="stopbg">
         <div class="container py-4"> 
             <div class="row text-center text-white mb-3">
@@ -16,7 +15,6 @@
                     <ul class="list-group shadow">
                     {% for key, value in No_Nm_list.items %}
                     <li class="list-group-item">
-                            <div class ="bus_result">    
                             {% if key in stop %}<a href="{% url 'book_stop' busid key value %}">
                                     <i class="fa fa-star"></i></a>
                             {% else %} <a href="{% url 'book_stop' busid key value %}">
@@ -24,6 +22,7 @@
                             {% endif %}
                             <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
                             <br>
+                        </li>
                         
                             
                         {% endfor %} 
