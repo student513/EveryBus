@@ -23,7 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'd_p0qi&82*uu&d-tf0s$sz=&dqx%u_1y(ga-hhe9!fig0f%=7e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['production-env.rx6mah5wnp.ap-northeast-2.elasticbeanstalk.com','127.0.0.1','everybus.co.kr']
 

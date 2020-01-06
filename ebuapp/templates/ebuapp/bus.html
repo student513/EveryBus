@@ -14,18 +14,18 @@
                     <!-- List group-->
                     <ul class="list-group shadow">
                     {% for key, value in No_Nm_list.items %}
-                    <li class="list-group-item">
+                        <li class="list-group-item">
                             {% if key in stop %}<a href="{% url 'book_stop' busid key value %}">
                                     <i class="fa fa-star"></i></a>
                             {% else %} <a href="{% url 'book_stop' busid key value %}">
                                     <i class="fa fa-star-o"></i></a>
                             {% endif %}
                             <a class="btn-link" href= "{% url 'stop' key %}">{{value}} </a>     
-                            <br>
+                                <br>
                         </li>
                         
                             
-                        {% endfor %} 
+                    {% endfor %} 
                     </ul>
                 
             </div>   
