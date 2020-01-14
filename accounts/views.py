@@ -6,7 +6,8 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from .forms import SignUpForm,CustomUserChangeForm,ProfileRegisterForm,LoginForm
 from django.http import HttpResponse
-from django.contrib import auth
+from django.contrib import auth, messages
+
 def signup(request):
     if request.method == 'POST':
         #signup_form = UserCreationForm(request.POST)
@@ -18,9 +19,10 @@ def signup(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            messages.info(request,"회원가입이 완료되었습니다.")
             auth.login(request,user)# 회원가입시 자동로그인
-            # messages.info(request,"회원가입이 완료되었습니다.")
             return redirect('home')
+
     else:
         #signup_form = UserCreationForm()
         signup_form = SignUpForm()

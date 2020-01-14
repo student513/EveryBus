@@ -35,12 +35,29 @@ def get_request_url(url):
         print("[%s] Error for URL : %s" % (datetime.datetime.now(), url))
         return None
 
+def station_nxst(arsId):
+    ###정류소 방면 찾는 API
+    url_nxst = 'http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&arsId='
+    #arsId = data['ServiceResult']['msgBody']['itemList']['arsId']
+    url_nxst += str(arsId)
+    retNxst = get_request_url(url_nxst)
+    todict_nxst = xmltodict.parse(retNxst)
+    json_type_Nxst = json.dumps(todict_nxst)
+    data_Nxst = json.loads(json_type_Nxst)
+    
+    
+    ### 맨 처음 nxtStn만 data_Nxst에 저장하고 싶다
+    if (data_Nxst == None):
+        return None
+    else:
+        return data_Nxst
+
 
 def stop_search(request):
 
     if request.user.is_active == False:
         return render(request, 'ebuapp/stop_search.html')
-        
+    
     stationpair = {}    #초기화
     url = 'http://ws.bus.go.kr/api/rest/stationinfo/getLowStationByName?ServiceKey=O1F7ztluCGyI1rB%2BVXh7Tux83RXDm4x4c5s5Nr1jZOZrD3v7uXF1LZvUHDyPTPm87qeLXFzeeoTN507bf1Ceow%3D%3D&stSrch='
     word = request.GET.get('q') #입력받은 단어 word 변수에 저장
@@ -50,15 +67,38 @@ def stop_search(request):
     todict = xmltodict.parse(retData)
     json_type = json.dumps(todict)
     data = json.loads(json_type)
+
     if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
         try:
             for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
                 stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data['ServiceResult']['msgBody']['itemList'][i]['stNm']
-        except KeyError : 
+        except KeyError : #검색결과가 한개일 경우
             stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
     else: #검색어에 해당하는 정류소가 없는 경우 
         return render(request, 'ebuapp/no_name.html')
     return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
+
+    # data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList'][0]['arsId'])
+    # Nxst = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn']
+    
+    # data_Nxst={}
+    # Nxst={}
+    # if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
+    #     try:
+    #         for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
+    #             data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList'][i]['arsId'])
+    #             #Nxst = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn']
+    #             print(data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn'])
+    #             stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn'] #data['ServiceResult']['msgBody']['itemList'][i]['stNm']
+    #     except KeyError : #검색결과가 한개일 경우
+    #         data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList']['arsId'])
+    #         Nxst = data_Nxst['ServiceResult']['msgBody']['itemList']['nxtStn']
+    #         stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
+    
+    
+    # else: #검색어에 해당하는 정류소가 없는 경우 
+    #     return render(request, 'ebuapp/no_name.html')
+    # return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
 
 
 

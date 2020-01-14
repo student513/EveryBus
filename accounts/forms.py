@@ -56,6 +56,7 @@ class ProfileRegisterForm(forms.ModelForm):
     def stoppop(self,key):
         del self.stopbookmark[key]
         self.stopbookkey.remove(key)
+        
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User

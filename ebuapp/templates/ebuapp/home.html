@@ -24,30 +24,43 @@
 
 
     
-      <div class="box1">
-          <div style="display: inline-block">
-              <form method = "GET" action = "{% url 'stop_search' %}">
-                  <input type = "search" name = "q" placeholder="정류소명으로 검색" class="fset form-control" value="{{request.GET.q}}" id='search-text' autofocus="">
-                      </form>
-          </div>
-          <div class="container-1" style="display: inline-block">
-              <span class="icon"><i class="fa fa-search"></i></span>
-            </div>
+    <div class="box1">
+        <div style="display: inline-block">
+            <form method = "GET" action = "{% url 'stop_search' %}">
+                <input type = "search" name = "q" placeholder="정류소명으로 검색" class="fset form-control" value="{{request.GET.q}}" id='search-text' autofocus="">
+            </form>
         </div>
+        <div class="container-1" style="display: inline-block">
+            <span class="icon"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
 
-        <div class="box2">
-          <div style="display: inline-block">
-              <form method = "GET" action = "{% url 'bus_search' %}">
-                  <input type = "search" name = "q" placeholder="버스번호로 검색" class="fset form-control" value="{{request.GET.q}}" id='search-text' autofocus="">
-                  </form>
-          </div>
-          <div class="container-1" style="display: inline-block">
-              <span class="icon"><i class="fa fa-search"></i></span>
-            </div>
+    <div class="box2">
+        <div style="display: inline-block">
+            <form method = "GET" action = "{% url 'bus_search' %}">
+                <input type = "search" name = "q" placeholder="버스번호로 검색" class="fset form-control" value="{{request.GET.q}}" id='search-text' autofocus="">
+            </form>
         </div>
+        <div class="container-1" style="display: inline-block">
+            <span class="icon"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+    
+    <!-- <div class="box2">
+        <div style="display: inline-block">
+            <form method = "GET" action = "{% url 'bus_search' %}">
+                <input type = "search" name = "q" placeholder="버스번호로 검색" class="fset form-control" value="{{request.GET.q}}" id='search-text' autofocus="">
+            </form>
+        </div>
+        <div class="container-1" style="display: inline-block">
+            <span class="icon"><i class="fa fa-search"></i></span>
+        </div>
+    </div> -->
         
         <br>
-                  
+        {% if messages %}
+            {{ message.message }}
+        {% endif %}          
     
         {% if user.is_active %}
            <a class="white_fset" href = "{% url 'logout' %}">로그아웃</a>
