@@ -67,39 +67,40 @@ def stop_search(request):
     todict = xmltodict.parse(retData)
     json_type = json.dumps(todict)
     data = json.loads(json_type)
-
-    if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
-        try:
-            for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
-                stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data['ServiceResult']['msgBody']['itemList'][i]['stNm']
-        except KeyError : #검색결과가 한개일 경우
-            stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
-    else: #검색어에 해당하는 정류소가 없는 경우 
-        return render(request, 'ebuapp/no_name.html')
-    return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
+    ######
+    # if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
+    #     try:
+    #         for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
+    #             stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data['ServiceResult']['msgBody']['itemList'][i]['stNm']
+    #     except KeyError : #검색결과가 한개일 경우
+    #         stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
+    # else: #검색어에 해당하는 정류소가 없는 경우 
+    #     return render(request, 'ebuapp/no_name.html')
+    # return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
+    # ######
 
     # data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList'][0]['arsId'])
     # Nxst = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn']
     
-    # data_Nxst={}
-    # Nxst={}
-    # if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
-    #     try:
-    #         for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
-    #             data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList'][i]['arsId'])
-    #             #Nxst = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn']
-    #             print(data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn'])
-    #             stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn'] #data['ServiceResult']['msgBody']['itemList'][i]['stNm']
-    #     except KeyError : #검색결과가 한개일 경우
-    #         data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList']['arsId'])
-    #         Nxst = data_Nxst['ServiceResult']['msgBody']['itemList']['nxtStn']
-    #         stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
-    
-    
-    # else: #검색어에 해당하는 정류소가 없는 경우 
-    #     return render(request, 'ebuapp/no_name.html')
-    # return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
-
+    data_Nxst={}
+    Nxst={}
+    if(data['ServiceResult']['msgHeader']['headerMsg'] != '결과가 없습니다.'):  #검색어에 해당하는 정류소가 있는 경우
+        try:
+            for i in range(len(data['ServiceResult']['msgBody']['itemList'])):
+                data_Nxst = station_nxst(data['ServiceResult']['msgBody']['itemList'][i]['arsId'])
+                #stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data_Nxst#data['ServiceResult']['msgBody']['itemList'][i]['stNm']
+                if(len(data['ServiceResult']['msgBody']['itemList']) == 1):#한개뿐일때
+                    stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = [data['ServiceResult']['msgBody']['itemList'][i]['stNm'],data_Nxst['ServiceResult']['msgBody']['itemList']['nxtStn']]
+                elif(len(data['ServiceResult']['msgBody']['itemList']) > 1):#여러개일때
+                    stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = [data['ServiceResult']['msgBody']['itemList'][i]['stNm'],data_Nxst['ServiceResult']['msgBody']['itemList'][0]['nxtStn']]
+                else:
+                    stationpair[data['ServiceResult']['msgBody']['itemList'][i]['stId']] = data['ServiceResult']['msgBody']['itemList'][i]['stNm']
+        except KeyError : #검색결과가 한개일 경우
+            stationpair[data['ServiceResult']['msgBody']['itemList']['stId']] = data['ServiceResult']['msgBody']['itemList']['stNm']
+            
+    else: #검색어에 해당하는 정류소가 없는 경우 
+        return render(request, 'ebuapp/no_name.html')
+    return render(request, 'ebuapp/stop_search.html', {'stationpair' : stationpair})
 
 
     try:
